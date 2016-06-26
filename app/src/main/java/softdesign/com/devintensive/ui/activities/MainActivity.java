@@ -69,9 +69,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mFab.setOnClickListener(this);
         setupToolbar();
         setupDrawer();
-        //loadUserInfoValue();
+        loadUserInfoValue();
 
-        List<String> test = mDataManager.getPreferenceManager().loadUserProfileData();
+        //List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
 
 
 
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
-        //saveUserInfoValue();
+        saveUserInfoValue();
     }
 
     @Override
@@ -137,7 +137,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (mCurrentEditMode == 0) {
                     changeEditMode(1);
                     mCurrentEditMode = 1;
-
                 } else {
                     changeEditMode(0);
                     mCurrentEditMode = 0;
@@ -196,18 +195,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 userValue.setEnabled(false);
                 userValue.setFocusable(false);
                 userValue.setFocusableInTouchMode(false);
-                //saveUserInfoValue();
+                saveUserInfoValue();
                 }
         }
 
     }
 
 /*    private void loadUserInfoValue() {
-        List<String> userData = mDataManager.getPreferenceManager().loadUserProfileData();
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
         for (int i = 0; i < userData.size(); i++) {
             mUserInfoViews.get(i).setText(userData.get(i));
         }
+    }*/
 
+    private void loadUserInfoValue() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
+        for (int index = 0; index < userData.size(); index++) {
+            mUserInfoViews.get(index).setText(userData.get(index));
+        }
     }
 
     private void saveUserInfoValue() {
@@ -215,7 +220,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         for (EditText userFieldsView : mUserInfoViews) {
             userData.add(userFieldsView.getText().toString());
         }
-        mDataManager.getPreferenceManager().saveUserProfileData(userData);
-    }*/
+        mDataManager.getPreferencesManager().saveUserProfileData(userData);
+    }
 
 }

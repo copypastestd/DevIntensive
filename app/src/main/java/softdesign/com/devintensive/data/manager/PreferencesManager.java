@@ -8,14 +8,14 @@ import java.util.List;
 import softdesign.com.devintensive.utils.ConstantManager;
 import softdesign.com.devintensive.utils.DevIntensiveApplication;
 
-public class PreferenceManager {
+public class PreferencesManager {
 
     private SharedPreferences mSharedPreferences;
 
     private static final String[] USER_FIELDS = {ConstantManager.USER_PHONE_KEY, ConstantManager.USER_MAIL_KEY, ConstantManager.USER_VK_KEY, ConstantManager.USER_GIT_KEY, ConstantManager.USER_BIO_KEY};
 
 
-    public PreferenceManager() {
+    public PreferencesManager() {
         this.mSharedPreferences = DevIntensiveApplication.getSharedPreferences();
     }
 

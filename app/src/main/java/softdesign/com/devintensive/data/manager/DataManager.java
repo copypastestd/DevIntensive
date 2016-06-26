@@ -4,10 +4,10 @@ public class DataManager {
 
     private static DataManager INSTANCE = null;
 
-    private PreferenceManager mPreferenceManager;
+    private PreferencesManager mPreferencesManager;
 
     public DataManager() {
-        this.mPreferenceManager = new PreferenceManager();
+        this.mPreferencesManager = new PreferencesManager();
     }
 
 
@@ -18,7 +18,7 @@ public class DataManager {
         return INSTANCE;
     }
 
-    public PreferenceManager getPreferenceManager() {
-        return mPreferenceManager;
+    public PreferencesManager getPreferencesManager() {
+        return mPreferencesManager;
     }
 }
