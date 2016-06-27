@@ -1,5 +1,6 @@
 package softdesign.com.devintensive.ui.activities;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import java.util.List;
 import softdesign.com.devintensive.R;
 import softdesign.com.devintensive.data.manager.DataManager;
 import softdesign.com.devintensive.utils.ConstantManager;
+import softdesign.com.devintensive.utils.RoundedAvatarDrawable;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -34,6 +36,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private CoordinatorLayout mCoordinatorLayout;
     private Toolbar mToolbar;
     private DrawerLayout mNavigationDrawer;
+    ImageView mAvatar;
     private FloatingActionButton mFab;
     private EditText mUserPhone, mUserMail, mUserVk, mUserGit, mUserBio;
 
@@ -63,6 +66,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserInfoViews.add(mUserVk);
         mUserInfoViews.add(mUserGit);
         mUserInfoViews.add(mUserBio);
+
+        mAvatar = (ImageView) findViewById(R.id.avatar);
+        mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.user_avatar)));
+
+
+
 
 
         mFab.setOnClickListener(this);
@@ -183,9 +192,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 showSnackbar(item.getTitle().toString());
                 item.setChecked(true);
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
+
+                //mAvatar = (ImageView)findViewById(R.id.avatar);
+                //mAvatar.setImageResource(R.drawable.user_avatar);
                 return false;
             }
         });
+  /*      ImageView avatar = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.navigation_view);
+        ImageL
+        avatar.setImageResource(R.drawable.user_avatar);*/
+
+
+      /*  ImageView drawerProfile = (ImageView) mNavigationDrawer.findViewById(R.id.avatar);
+        drawerProfile.setImageResource(R.drawable.user_avatar);*/
+
+
+
+
     }
 
     /**
