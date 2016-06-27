@@ -65,14 +65,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserInfoViews.add(mUserBio);
 
 
-
         mFab.setOnClickListener(this);
         setupToolbar();
         setupDrawer();
-        loadUserInfoValue();
+        //saveUserInfoValue();
 
-        //List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
-
+        List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
 
 
         if(savedInstanceState == null) {
@@ -81,6 +79,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             // активити уже создавалось
             mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 0);
             changeEditMode(mCurrentEditMode);
+            loadUserInfoValue();
+
         }
     }
 
@@ -102,7 +102,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-
     }
 
     @Override
@@ -142,6 +141,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     mCurrentEditMode = 0;
                 }
                 break;
+        }
+    }
+
+    /**
+     * закрывает Drawer по нажатию кнопки Back
+     * */
+    @Override
+    public void onBackPressed() {
+        if(mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -201,17 +212,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     }
 
-/*    private void loadUserInfoValue() {
+    private void loadUserInfoValue() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
         for (int i = 0; i < userData.size(); i++) {
             mUserInfoViews.get(i).setText(userData.get(i));
-        }
-    }*/
-
-    private void loadUserInfoValue() {
-        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
-        for (int index = 0; index < userData.size(); index++) {
-            mUserInfoViews.get(index).setText(userData.get(index));
         }
     }
 
