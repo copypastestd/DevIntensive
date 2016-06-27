@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setupDrawer();
         //saveUserInfoValue();
 
-        List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
+        //List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
 
 
         if(savedInstanceState == null) {
