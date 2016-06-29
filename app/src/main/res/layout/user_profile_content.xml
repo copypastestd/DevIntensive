@@ -1,0 +1,292 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/spacing_medial_24"
+            android:paddingTop="@dimen/spacing_medial_24">
+
+            <LinearLayout
+                style="@style/container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72"
+                android:layout_weight="1">
+
+                <TextView
+                    style="@style/text.up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"/>
+
+                <TextView
+                    style="@style/text.down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Рейтинг"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/line_size"
+                android:layout_height="72dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/grey_light"/>
+
+            <LinearLayout
+                style="@style/container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72"
+                android:layout_weight="2">
+
+                <TextView
+                    style="@style/text.up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2500"/>
+
+                <TextView
+                    style="@style/text.down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Написано строк кода" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/line_size"
+                android:layout_height="72dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/grey_light"/>
+
+            <LinearLayout
+                style="@style/container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72"
+                android:layout_weight="1">
+
+                <TextView
+                    style="@style/text.up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5" />
+
+                <TextView
+                    style="@style/text.down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Проектов" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/row_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_call_black_24dp"/>
+
+            <LinearLayout
+                style="@style/data_linear"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/edit"
+                        android:id="@+id/phone_et"
+                        android:inputType="phone"
+                        android:text="+79268642675"
+                        android:hint="@string/phone"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <!--style="@style/icon.right"-->
+            <ImageView
+                android:id="@+id/call_img"
+                style="@style/icon.right"
+                android:src="@drawable/ic_phone_in_talk_black_24dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_size"
+            android:background="@color/grey_light"
+            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+
+        <LinearLayout
+            style="@style/row_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_mail_black_24dp"/>
+
+            <LinearLayout
+                style="@style/data_linear"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/edit"
+                        android:id="@+id/email_et"
+                        android:hint="@string/e_mail"
+                        android:inputType="textEmailAddress"
+                        android:text="qwsa@mail.xyz"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_send_black_24dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_size"
+            android:background="@color/grey_light"
+            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+
+        <LinearLayout
+            style="@style/row_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_vk"/>
+
+            <LinearLayout
+                style="@style/data_linear"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/edit"
+                        android:id="@+id/vk_et"
+                        android:hint="@string/vk"
+                        android:inputType="textUri"
+                        android:text="vk.com/rain_man"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_visibility_black_24dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_size"
+            android:background="@color/grey_light"
+            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+
+        <LinearLayout
+            style="@style/row_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_github"/>
+
+            <LinearLayout
+                style="@style/data_linear"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/edit"
+                        android:id="@+id/github_et"
+                        android:hint="@string/repo"
+                        android:inputType="textEmailAddress"
+                        android:text="github.com/copypastestd"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_visibility_black_24dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_size"
+            android:background="@color/grey_light"
+            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+
+        <LinearLayout
+            style="@style/row_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_account_circle_black_24dp"/>
+
+            <LinearLayout
+                style="@style/data_linear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/edit"
+                        android:id="@+id/bio_et"
+                        android:paddingRight="@dimen/spacing_medium_32"
+                        android:hint="@string/about"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:text="@string/lorem_ipsum"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

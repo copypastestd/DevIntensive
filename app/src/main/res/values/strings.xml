@@ -6,4 +6,5 @@
     <string name="vk">Профиль в Vk</string>
     <string name="e_mail">E-mail</string>
     <string name="phone">Мобильный</string>
+    <string name="user_profile.placeholder.image">Изменить фотографию профиля</string>
 </resources>

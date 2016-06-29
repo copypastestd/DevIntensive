@@ -1,5 +1,6 @@
 package softdesign.com.devintensive.ui.activities;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -195,22 +196,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 item.setChecked(true);
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
 
-                //mAvatar = (ImageView)findViewById(R.id.avatar);
-                //mAvatar.setImageResource(R.drawable.user_avatar);
                 return false;
             }
         });
-  /*      ImageView avatar = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.navigation_view);
-        ImageL
-        avatar.setImageResource(R.drawable.user_avatar);*/
 
+    }
 
-      /*  ImageView drawerProfile = (ImageView) mNavigationDrawer.findViewById(R.id.avatar);
-        drawerProfile.setImageResource(R.drawable.user_avatar);*/
-
-
-
-
+    /**
+     * Получение результата из другой Activity (фото из камеры или галлереи)
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -234,7 +234,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 saveUserInfoValue();
                 }
         }
-
     }
 
     private void loadUserInfoValue() {
@@ -250,6 +249,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             userData.add(userFieldsView.getText().toString());
         }
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
+    }
+
+    private void loadPhotoFromGallery() {
+
+    }
+
+    private void loadPhotoFromCamera() {
+
     }
 
 }
