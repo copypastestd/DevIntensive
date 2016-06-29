@@ -67,7 +67,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserInfoViews.add(mUserGit);
         mUserInfoViews.add(mUserBio);
 
-        mAvatar = (ImageView) findViewById(R.id.avatar);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View hView =  navigationView.getHeaderView(0);
+        ImageView mAvatar = (ImageView)hView.findViewById(R.id.avatar);
         mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.user_avatar)));
 
 
