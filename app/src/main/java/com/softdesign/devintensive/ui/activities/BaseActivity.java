@@ -1,4 +1,4 @@
-package softdesign.com.devintensive.ui.activities;
+package com.softdesign.devintensive.ui.activities;
 
 
 import android.app.ProgressDialog;
@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import softdesign.com.devintensive.R;
-import softdesign.com.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.R;
+import com.softdesign.devintensive.utils.ConstantManager;
 
 /**
  * Базовый класс для всех активити
