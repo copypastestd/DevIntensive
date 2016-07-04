@@ -1,5 +1,6 @@
 package com.softdesign.devintensive.ui.activities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -33,7 +34,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.softdesign.devintensive.Manifest;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
 import com.softdesign.devintensive.utils.ConstantManager;
@@ -46,6 +46,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+//import com.softdesign.devintensive.Manifest;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -332,38 +334,46 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         startActivityForResult(Intent.createChooser(takeGalleryIntent, getString(R.string.user_profile_choice_message)), ConstantManager.REQUEST_GALLERY_PICTURE);
     }
 
+
     private void loadPhotoFromCamera() {
         Log.d("MY_TAG", "HERE");
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        //if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                //&& ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            try {
-                mPhotoFile = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                // TODO: 02.07.2016 обработать ошибку
-            }
+                //if(true) {
+                Log.d("MY_TAG", "CHECK PERMISSIONS");
 
-            if (mPhotoFile != null) {
-                // TODO: 02.07.2016 передать фотофайл в интент
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
-                startActivityForResult(takePictureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
-            }
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, ConstantManager.CAMERE_REQUEST_PERMISSION_CODE);
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    Log.d("MY_TAG", "TRY");
+                    mPhotoFile = createImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // TODO: 02.07.2016 обработать ошибку
+                }
 
-            Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
-                    .setAction("Разрешить", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            openApplicationSettings();
-                        }
-                    }).show();
+                if (mPhotoFile != null) {
+                    // TODO: 02.07.2016 передать фотофайл в интент
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+                    startActivityForResult(takePictureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
+                }
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, ConstantManager.CAMERE_REQUEST_PERMISSION_CODE);
+
+                Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
+                        .setAction("Разрешить", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                openApplicationSettings();
+                            }
+                        }).show();
         }
+
     }
 
     @Override
@@ -453,6 +463,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         return image;
     }
+
 
     private void insertProfileImage(Uri selectedImage) {
         Picasso.with(this)
