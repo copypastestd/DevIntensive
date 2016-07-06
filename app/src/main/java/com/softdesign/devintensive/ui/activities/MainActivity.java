@@ -29,21 +29,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.RoundedAvatarDrawable;
+import com.softdesign.devintensive.utils.UserDataTextWatcher;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -57,9 +55,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-//import com.softdesign.devintensive.Manifest;
-
-public class MainActivity extends BaseActivity /*implements View.OnClickListener*/ {
+public class MainActivity extends BaseActivity {
 
     private static String TAG = ConstantManager.TAG_PREFIX + "Main Activity";
 
@@ -74,7 +70,6 @@ public class MainActivity extends BaseActivity /*implements View.OnClickListener
     Toolbar mToolbar;
     @BindView(R.id.navigation_drawer)
     DrawerLayout mNavigationDrawer;
-    //@BindView(R.id.avatar) ImageView mAvatar;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.profile_placeholder)
@@ -97,19 +92,15 @@ public class MainActivity extends BaseActivity /*implements View.OnClickListener
 
     private ImageView mAvatar;
 
-    //TODO DELETE
-    /*private ImageView mCallImg;
-    private CoordinatorLayout mCoordinatorLayout;
-    private Toolbar mToolbar;
-    private DrawerLayout mNavigationDrawer;
-    private ImageView mAvatar;
-    private FloatingActionButton mFab;
-    private RelativeLayout mProfilePlaceholder;
-    private CollapsingToolbarLayout mCollapsingToolbar;
-    private AppBarLayout mAppBarLayout;
-    private ImageView mProfileImage;*/
 
-    //private EditText mUserPhone, mUserMail, mUserVk, mUserGit, mUserBio;
+    @BindView(R.id.phone_layout)
+    LinearLayout phoneLayout;
+    @BindView(R.id.email_layout)
+    LinearLayout emailLayout;
+    @BindView(R.id.vk_layout)
+    LinearLayout vkLayout;
+    @BindView(R.id.github_layout)
+    LinearLayout githubLayout;
 
     @BindView(R.id.input_layout_phone)
     TextInputLayout inputLayoutPhone;
@@ -146,23 +137,6 @@ public class MainActivity extends BaseActivity /*implements View.OnClickListener
 
         mDataManager = DataManager.getInstance();
 
-        //TODO DELETE
-        /*mCallImg = (ImageView) findViewById(R.id.call_img);
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mProfilePlaceholder = (RelativeLayout) findViewById(R.id.profile_placeholder);
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
-        mProfileImage = (ImageView) findViewById(R.id.user_photo_img);*/
-
-      /*  mUserPhone = (EditText) findViewById(R.id.phone_et);
-        mUserMail = (EditText) findViewById(R.id.email_et);
-        mUserVk = (EditText) findViewById(R.id.vk_et);
-        mUserGit = (EditText) findViewById(R.id.github_et);
-        mUserBio = (EditText) findViewById(R.id.bio_et);*/
-
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(mUserPhone);
         mUserInfoViews.add(mUserMail);
@@ -174,10 +148,6 @@ public class MainActivity extends BaseActivity /*implements View.OnClickListener
         View hView = navigationView.getHeaderView(0);
         mAvatar = (ImageView) hView.findViewById(R.id.avatar);
         mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.avatar)));
-
-        //TODO DELETE
-       /* mFab.setOnClickListener(this);
-        mProfilePlaceholder.setOnClickListener(this);*/
 
         setupToolbar();
         setupDrawer();
@@ -204,11 +174,20 @@ public class MainActivity extends BaseActivity /*implements View.OnClickListener
         }
 
         mUserPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        mUserPhone.addTextChangedListener(new MyTextWatcher(mUserPhone));
-        mUserMail.addTextChangedListener(new MyTextWatcher(mUserMail));
+        //mUserPhone.addTextChangedListener(new MyTextWatcher(mUserPhone));
+        //mUserMail.addTextChangedListener(new MyTextWatcher(mUserMail));
+
+        mUserPhone.addTextChangedListener(new UserDataTextWatcher(this, phoneLayout, inputLayoutPhone, mUserPhone));
+        mUserMail.addTextChangedListener(new UserDataTextWatcher(this, emailLayout, inputLayoutEmail, mUserMail));
+        mUserVk.addTextChangedListener(new UserDataTextWatcher(this, vkLayout, inputLayoutVk, mUserVk));
+        mUserGit.addTextChangedListener(new UserDataTextWatcher(this, githubLayout, inputLayoutGithub, mUserGit));
 
     }
 
+    /**
+     * Заполняет поля значениями по умолчанию,
+     * при первом запуске приложения
+     */
     private void fillDataToEditTexts() {
         mUserPhone.setText(getString(R.string.phone_et_text));
         mUserMail.setText(getString(R.string.email_et_text));
@@ -300,27 +279,6 @@ public class MainActivity extends BaseActivity /*implements View.OnClickListener
     public void onWatchGithubClick() {
         watchGithub();
     }
-
-    //TODO DELETE
-   /* @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab:
-                if (mCurrentEditMode == 0) {
-                    changeEditMode(1);
-                    mCurrentEditMode = 1;
-                } else {
-                    changeEditMode(0);
-                    mCurrentEditMode = 0;
-                }
-                break;
-
-            case R.id.profile_placeholder:
-                // TODO: 01.07.2016 сделать выбор откуда загружать фото
-                showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
-                break;
-        }
-    }*/
 
     /**
      * закрывает Drawer по нажатию кнопки Back
@@ -650,95 +608,6 @@ public class MainActivity extends BaseActivity /*implements View.OnClickListener
             startActivity(watchGithubIntent);
         } else {
             showSnackbar(getString(R.string.warning_github_profile));
-        }
-    }
-
-
-    private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.phone_et:
-                    validatePhone();
-                    break;
-                case R.id.email_et:
-                    validateEmail();
-                    break;
-                case R.id.vk_et:
-                    validateVk();
-                    break;
-                case R.id.github_et:
-                    validateGithub();
-                    break;
-            }
-        }
-    }
-
-    private boolean validatePhone() {
-        if (mUserPhone.getText().toString().trim().isEmpty()) {
-            inputLayoutPhone.setError(getString(R.string.err_msg_phone));
-            requestFocus(mUserPhone);
-            return false;
-        } else {
-            inputLayoutPhone.setErrorEnabled(false);
-        }
-        return true;
-    }
-
-    private boolean validateEmail() {
-        String email = mUserMail.getText().toString().trim();
-
-        if (email.isEmpty() || !isValidEmail(email)) {
-            inputLayoutEmail.setError(getString(R.string.err_msg_email));
-            requestFocus(mUserMail);
-            return false;
-        } else {
-            inputLayoutEmail.setErrorEnabled(false);
-        }
-        return true;
-    }
-
-    private boolean validateVk() {
-        if (mUserVk.getText().toString().trim().isEmpty()) {
-            inputLayoutVk.setError(getString(R.string.err_msg_vk));
-            requestFocus(mUserVk);
-            return false;
-        } else {
-            inputLayoutVk.setErrorEnabled(false);
-        }
-        return true;
-    }
-
-    private boolean validateGithub() {
-        if (mUserVk.getText().toString().trim().isEmpty()) {
-            inputLayoutVk.setError(getString(R.string.err_msg_vk));
-            requestFocus(mUserVk);
-            return false;
-        } else {
-            inputLayoutVk.setErrorEnabled(false);
-        }
-        return true;
-    }
-
-    private static boolean isValidEmail(String email) {
-        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
