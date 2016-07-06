@@ -20,6 +20,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -27,9 +28,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -47,9 +53,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 //import com.softdesign.devintensive.Manifest;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity /*implements View.OnClickListener*/ {
 
     private static String TAG = ConstantManager.TAG_PREFIX + "Main Activity";
 
@@ -57,7 +67,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private int mCurrentEditMode = 0;
 
-    private ImageView mCallImg;
+
+    @BindView(R.id.main_coordinator_container)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.navigation_drawer)
+    DrawerLayout mNavigationDrawer;
+    //@BindView(R.id.avatar) ImageView mAvatar;
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+    @BindView(R.id.profile_placeholder)
+    RelativeLayout mProfilePlaceholder;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbar;
+    @BindView(R.id.appbar_layout)
+    AppBarLayout mAppBarLayout;
+    @BindView(R.id.user_photo_img)
+    ImageView mProfileImage;
+
+    @BindView(R.id.call_img)
+    ImageView mCallImg;
+    @BindView(R.id.send_email_img)
+    ImageView mSendEmailImg;
+    @BindView(R.id.watch_vk_img)
+    ImageView mWatchVkImg;
+    @BindView(R.id.watch_github_img)
+    ImageView mWatchGithubImg;
+
+    private ImageView mAvatar;
+
+    //TODO DELETE
+    /*private ImageView mCallImg;
     private CoordinatorLayout mCoordinatorLayout;
     private Toolbar mToolbar;
     private DrawerLayout mNavigationDrawer;
@@ -66,9 +107,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RelativeLayout mProfilePlaceholder;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout mAppBarLayout;
-    private ImageView mProfileImage;
+    private ImageView mProfileImage;*/
 
-    private EditText mUserPhone, mUserMail, mUserVk, mUserGit, mUserBio;
+    //private EditText mUserPhone, mUserMail, mUserVk, mUserGit, mUserBio;
+
+    @BindView(R.id.input_layout_phone)
+    TextInputLayout inputLayoutPhone;
+    @BindView(R.id.input_layout_email)
+    TextInputLayout inputLayoutEmail;
+    @BindView(R.id.input_layout_vk)
+    TextInputLayout inputLayoutVk;
+    @BindView(R.id.input_layout_github)
+    TextInputLayout inputLayoutGithub;
+
+    @BindView(R.id.phone_et)
+    EditText mUserPhone;
+    @BindView(R.id.email_et)
+    EditText mUserMail;
+    @BindView(R.id.vk_et)
+    EditText mUserVk;
+    @BindView(R.id.github_et)
+    EditText mUserGit;
+    @BindView(R.id.bio_et)
+    EditText mUserBio;
+
     private List<EditText> mUserInfoViews;
 
     private AppBarLayout.LayoutParams mAppBarParams = null;
@@ -79,10 +141,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         Log.d(TAG, "onCreate");
 
         mDataManager = DataManager.getInstance();
-        mCallImg = (ImageView) findViewById(R.id.call_img);
+
+        //TODO DELETE
+        /*mCallImg = (ImageView) findViewById(R.id.call_img);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
@@ -90,13 +155,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mProfilePlaceholder = (RelativeLayout) findViewById(R.id.profile_placeholder);
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
-        mProfileImage = (ImageView) findViewById(R.id.user_photo_img);
+        mProfileImage = (ImageView) findViewById(R.id.user_photo_img);*/
 
-        mUserPhone = (EditText) findViewById(R.id.phone_et);
+      /*  mUserPhone = (EditText) findViewById(R.id.phone_et);
         mUserMail = (EditText) findViewById(R.id.email_et);
         mUserVk = (EditText) findViewById(R.id.vk_et);
         mUserGit = (EditText) findViewById(R.id.github_et);
-        mUserBio = (EditText) findViewById(R.id.bio_et);
+        mUserBio = (EditText) findViewById(R.id.bio_et);*/
 
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(mUserPhone);
@@ -110,8 +175,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mAvatar = (ImageView) hView.findViewById(R.id.avatar);
         mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.avatar)));
 
-        mFab.setOnClickListener(this);
-        mProfilePlaceholder.setOnClickListener(this);
+        //TODO DELETE
+       /* mFab.setOnClickListener(this);
+        mProfilePlaceholder.setOnClickListener(this);*/
 
         setupToolbar();
         setupDrawer();
@@ -127,6 +193,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         if (savedInstanceState == null) {
             // активити запускается впервые
+            fillDataToEditTexts();
         } else {
             // активити уже создавалось
             mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 0);
@@ -135,6 +202,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             loadUserInfoValue();
 
         }
+
+        mUserPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        mUserPhone.addTextChangedListener(new MyTextWatcher(mUserPhone));
+        mUserMail.addTextChangedListener(new MyTextWatcher(mUserMail));
+
+    }
+
+    private void fillDataToEditTexts() {
+        mUserPhone.setText(getString(R.string.phone_et_text));
+        mUserMail.setText(getString(R.string.email_et_text));
+        mUserVk.setText(getString(R.string.vk_et_text));
+        mUserGit.setText(getString(R.string.github_et_text));
+        mUserBio.setText(getString(R.string.bio_et_text));
     }
 
     @Override
@@ -182,7 +262,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Log.d(TAG, "onRestart");
     }
 
-    @Override
+
+    @OnClick(R.id.fab)
+    public void onFabClick() {
+        if (mCurrentEditMode == 0) {
+            changeEditMode(1);
+            mCurrentEditMode = 1;
+            mUserPhone.requestFocus();
+        } else {
+            changeEditMode(0);
+            mCurrentEditMode = 0;
+        }
+    }
+
+    @OnClick(R.id.profile_placeholder)
+    public void onProfilePlaceholderClick() {
+        // TODO: 01.07.2016 сделать выбор откуда загружать фото
+        showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
+    }
+
+    @OnClick(R.id.call_img)
+    public void onCallClick() {
+        makeCall();
+    }
+
+    @OnClick(R.id.send_email_img)
+    public void onSendEmailClick() {
+        sendEmail();
+    }
+
+    @OnClick(R.id.watch_vk_img)
+    public void onWatchVkClick() {
+        watchVk();
+    }
+
+    @OnClick(R.id.watch_github_img)
+    public void onWatchGithubClick() {
+        watchGithub();
+    }
+
+    //TODO DELETE
+   /* @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
@@ -200,7 +320,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
                 break;
         }
-    }
+    }*/
 
     /**
      * закрывает Drawer по нажатию кнопки Back
@@ -338,40 +458,40 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void loadPhotoFromCamera() {
         Log.d("MY_TAG", "HERE");
         //if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                //&& ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        //&& ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                //if(true) {
-                Log.d("MY_TAG", "CHECK PERMISSIONS");
+            //if(true) {
+            Log.d("MY_TAG", "CHECK PERMISSIONS");
 
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    Log.d("MY_TAG", "TRY");
-                    mPhotoFile = createImageFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // TODO: 02.07.2016 обработать ошибку
-                }
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            try {
+                Log.d("MY_TAG", "TRY");
+                mPhotoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO: 02.07.2016 обработать ошибку
+            }
 
-                if (mPhotoFile != null) {
-                    // TODO: 02.07.2016 передать фотофайл в интент
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
-                    startActivityForResult(takePictureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
-                }
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                }, ConstantManager.CAMERE_REQUEST_PERMISSION_CODE);
+            if (mPhotoFile != null) {
+                // TODO: 02.07.2016 передать фотофайл в интент
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+                startActivityForResult(takePictureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, ConstantManager.CAMERE_REQUEST_PERMISSION_CODE);
 
-                Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
-                        .setAction("Разрешить", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                openApplicationSettings();
-                            }
-                        }).show();
+            Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
+                    .setAction("Разрешить", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            openApplicationSettings();
+                        }
+                    }).show();
         }
 
     }
@@ -469,7 +589,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Picasso.with(this)
                 .load(selectedImage)
                 .into(mProfileImage);
-                // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
+        // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
         mDataManager.getPreferencesManager().saveUserPhoto(selectedImage);
 
     }
@@ -479,9 +599,148 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         startActivityForResult(appSettingsIntent, ConstantManager.PERMISSION_REQUEST_SETTINGS_CODE);
     }
 
+    /**
+     * Совершает звонок по номеру указанному в профиле
+     */
+    private void makeCall() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            String telNumber;
+            if(!mUserPhone.getText().toString().equals("")) {
+                telNumber = String.valueOf(mUserPhone.getText()).trim();
+                final Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + telNumber));
+                startActivity(callIntent);
+            } else {
+                showSnackbar(getString(R.string.warning_phone_number));
+            }
+        }
+    }
+
+    /**
+     * Отправляет email по адресу указанному в профиле
+     */
+    private void sendEmail() {
+        String emailAddress;
+        if (!mUserMail.getText().toString().equals("")) {
+            emailAddress = String.valueOf(mUserMail.getText()).trim();
+            final Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse("mailto: " + emailAddress));
+            startActivity(emailIntent);
+        } else {
+            showSnackbar(getString(R.string.warning_email_address));
+        }
+
+    }
+
+    private void watchVk() {
+        String vkAddress;
+        if (!mUserVk.getText().toString().equals("")) {
+            vkAddress = String.valueOf(mUserVk.getText()).trim();
+            Intent watchVkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.vk.com/" + vkAddress));
+            startActivity(watchVkIntent);
+        } else {
+            showSnackbar(getString(R.string.warning_vk_profile));
+        }
+    }
+
+    private void watchGithub() {
+        String githubAddress;
+        if (!mUserGit.getText().toString().equals("")) {
+            githubAddress = String.valueOf(mUserGit.getText()).trim();
+            Intent watchGithubIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.github.com/" + githubAddress));
+            startActivity(watchGithubIntent);
+        } else {
+            showSnackbar(getString(R.string.warning_github_profile));
+        }
+    }
 
 
+    private class MyTextWatcher implements TextWatcher {
 
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.phone_et:
+                    validatePhone();
+                    break;
+                case R.id.email_et:
+                    validateEmail();
+                    break;
+                case R.id.vk_et:
+                    validateVk();
+                    break;
+                case R.id.github_et:
+                    validateGithub();
+                    break;
+            }
+        }
+    }
+
+    private boolean validatePhone() {
+        if (mUserPhone.getText().toString().trim().isEmpty()) {
+            inputLayoutPhone.setError(getString(R.string.err_msg_phone));
+            requestFocus(mUserPhone);
+            return false;
+        } else {
+            inputLayoutPhone.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean validateEmail() {
+        String email = mUserMail.getText().toString().trim();
+
+        if (email.isEmpty() || !isValidEmail(email)) {
+            inputLayoutEmail.setError(getString(R.string.err_msg_email));
+            requestFocus(mUserMail);
+            return false;
+        } else {
+            inputLayoutEmail.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean validateVk() {
+        if (mUserVk.getText().toString().trim().isEmpty()) {
+            inputLayoutVk.setError(getString(R.string.err_msg_vk));
+            requestFocus(mUserVk);
+            return false;
+        } else {
+            inputLayoutVk.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean validateGithub() {
+        if (mUserVk.getText().toString().trim().isEmpty()) {
+            inputLayoutVk.setError(getString(R.string.err_msg_vk));
+            requestFocus(mUserVk);
+            return false;
+        } else {
+            inputLayoutVk.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
 
 
 }

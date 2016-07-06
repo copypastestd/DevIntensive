@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:ignore="contentDescription">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -104,28 +106,29 @@
                 android:src="@drawable/ic_call_black_24dp"/>
 
             <LinearLayout
-                style="@style/data_linear"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/size_large_72">
+                style="@style/data_linear">
 
+                <!--TODO app:errorTextAppearance не работает -->
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_phone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/profileItem_textInputLayout_error">
 
                     <EditText
                         style="@style/edit"
                         android:id="@+id/phone_et"
                         android:inputType="phone"
-                        android:text="+79268642675"
+                        android:maxLength="20"
+                        android:text="@string/phone_et_text"
                         android:hint="@string/phone"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
-            <!--style="@style/icon.right"-->
             <ImageView
-                android:id="@+id/call_img"
                 style="@style/icon.right"
+                android:id="@+id/call_img"
                 android:src="@drawable/ic_phone_in_talk_black_24dp"/>
 
         </LinearLayout>
@@ -146,11 +149,10 @@
                 android:src="@drawable/ic_mail_black_24dp"/>
 
             <LinearLayout
-                style="@style/data_linear"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/size_large_72">
+                style="@style/data_linear">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -159,13 +161,14 @@
                         android:id="@+id/email_et"
                         android:hint="@string/e_mail"
                         android:inputType="textEmailAddress"
-                        android:text="qwsa@mail.xyz"/>
+                        android:text="@string/email_et_text"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <ImageView
                 style="@style/icon.right"
+                android:id="@+id/send_email_img"
                 android:src="@drawable/ic_send_black_24dp"/>
 
         </LinearLayout>
@@ -186,11 +189,10 @@
                 android:src="@drawable/ic_vk"/>
 
             <LinearLayout
-                style="@style/data_linear"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/size_large_72">
+                style="@style/data_linear">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_vk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -199,13 +201,14 @@
                         android:id="@+id/vk_et"
                         android:hint="@string/vk"
                         android:inputType="textUri"
-                        android:text="vk.com/rain_man"/>
+                        android:text="@string/vk_et_text"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <ImageView
                 style="@style/icon.right"
+                android:id="@+id/watch_vk_img"
                 android:src="@drawable/ic_visibility_black_24dp"/>
 
         </LinearLayout>
@@ -226,11 +229,10 @@
                 android:src="@drawable/ic_github"/>
 
             <LinearLayout
-                style="@style/data_linear"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/size_large_72">
+                style="@style/data_linear">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_github"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -238,14 +240,15 @@
                         style="@style/edit"
                         android:id="@+id/github_et"
                         android:hint="@string/repo"
-                        android:inputType="textEmailAddress"
-                        android:text="github.com/copypastestd"/>
+                        android:inputType="textUri"
+                        android:text="@string/github_et_text"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <ImageView
                 style="@style/icon.right"
+                android:id="@+id/watch_github_img"
                 android:src="@drawable/ic_visibility_black_24dp"/>
 
         </LinearLayout>
@@ -279,8 +282,8 @@
                         android:id="@+id/bio_et"
                         android:paddingRight="@dimen/spacing_medium_32"
                         android:hint="@string/about"
-                        android:inputType="textMultiLine|textCapSentences"
-                        android:text="@string/lorem_ipsum"/>
+                        android:inputType="textMultiLine|textCapSentences|textNoSuggestions"
+                        android:text="@string/bio_et_text"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
