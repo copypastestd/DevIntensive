@@ -63,7 +63,6 @@ public class MainActivity extends BaseActivity {
 
     private int mCurrentEditMode = 0;
 
-
     @BindView(R.id.main_coordinator_container)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.toolbar)
@@ -174,8 +173,6 @@ public class MainActivity extends BaseActivity {
         }
 
         mUserPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        //mUserPhone.addTextChangedListener(new MyTextWatcher(mUserPhone));
-        //mUserMail.addTextChangedListener(new MyTextWatcher(mUserMail));
 
         mUserPhone.addTextChangedListener(new UserDataTextWatcher(this, phoneLayout, inputLayoutPhone, mUserPhone));
         mUserMail.addTextChangedListener(new UserDataTextWatcher(this, emailLayout, inputLayoutEmail, mUserMail));
@@ -240,7 +237,6 @@ public class MainActivity extends BaseActivity {
         super.onRestart();
         Log.d(TAG, "onRestart");
     }
-
 
     @OnClick(R.id.fab)
     public void onFabClick() {
@@ -382,7 +378,7 @@ public class MainActivity extends BaseActivity {
 
                 hideProfilePlaceholder();
                 unlockToolbar();
-                mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
+                mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
                 saveUserInfoValue();
             }
@@ -589,6 +585,9 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    /**
+     * Открывает профиль Vk по адресу указанному в профиле
+     */
     private void watchVk() {
         String vkAddress;
         if (!mUserVk.getText().toString().equals("")) {
@@ -600,6 +599,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Открывает профиль GitHub по адресу указанному в профиле
+     */
     private void watchGithub() {
         String githubAddress;
         if (!mUserGit.getText().toString().equals("")) {

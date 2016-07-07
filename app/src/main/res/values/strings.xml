@@ -35,5 +35,8 @@
     <string name="action_sign_in">ВОЙТИ</string>
     <string name="action_restore_password">Забыли пароль?</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="user_stats_rating">Рейтинг</string>
+    <string name="user_stats_codelines">Написано строк кода</string>
+    <string name="user_stats_projects">Проектов</string>
 
 </resources>

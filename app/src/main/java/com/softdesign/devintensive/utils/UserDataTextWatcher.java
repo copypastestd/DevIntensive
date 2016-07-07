@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by qwsa on 06.07.2016.
+ * Класс проверки вводимых пользователем данных
  */
 public class UserDataTextWatcher implements TextWatcher {
 
@@ -124,8 +124,6 @@ public class UserDataTextWatcher implements TextWatcher {
     }
 
     private static boolean isValidEmail(String email) {
-        //String EMALI_REGIX = "^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
-        //String EMAIL_REGIX = "^[A-Za-z0-9+_.-]{2}+@(^[A-Za-z0-9+_.-]{2}+\\.)+[a-zA-Z]{2}$";
         String EMAIL_REGIX = "^[A-Za-z0-9+_.-]{3,}+@([A-Za-z0-9+_.-]{2,})+\\.+[a-zA-Z]{2,}$";
         Pattern pattern = Pattern.compile(EMAIL_REGIX);
         Matcher matcher = pattern.matcher(email);
@@ -133,14 +131,14 @@ public class UserDataTextWatcher implements TextWatcher {
     }
 
     private static boolean isValidVk(String vk) {
-        String VK_REGIX = "^vk\\.com\\/[\\w]{3,}+$";
+        String VK_REGIX = "^vk\\.com/[\\w]{3,}+$";
         Pattern pattern = Pattern.compile(VK_REGIX);
         Matcher matcher = pattern.matcher(vk);
         return ((!vk.isEmpty()) && (matcher.matches()));
     }
 
     private static boolean isValidGithub(String github) {
-        String GITHUB_REGIX = "^github\\.com\\/[\\w]{3,}+$";
+        String GITHUB_REGIX = "^github\\.com/[\\w]{3,}+$";
         Pattern pattern = Pattern.compile(GITHUB_REGIX);
         Matcher matcher = pattern.matcher(github);
         return ((!github.isEmpty()) && (matcher.matches()));

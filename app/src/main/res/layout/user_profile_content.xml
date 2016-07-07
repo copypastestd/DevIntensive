@@ -1,9 +1,9 @@
 <android.support.v4.widget.NestedScrollView
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:ignore="contentDescription">
 
@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:background="@color/grey"
             android:orientation="horizontal"
+            android:gravity="center"
             android:paddingBottom="@dimen/spacing_medial_24"
             android:paddingTop="@dimen/spacing_medial_24">
 
@@ -36,7 +37,7 @@
                     style="@style/text.down"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Рейтинг"/>
+                    android:text="@string/user_stats_rating"/>
 
             </LinearLayout>
 
@@ -63,7 +64,7 @@
                     style="@style/text.down"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Написано строк кода" />
+                    android:text="@string/user_stats_codelines" />
 
             </LinearLayout>
 
@@ -90,7 +91,7 @@
                     style="@style/text.down"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Проектов" />
+                    android:text="@string/user_stats_projects" />
 
             </LinearLayout>
 
