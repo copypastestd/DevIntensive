@@ -80,6 +80,95 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <!-- app:layout_behavior=".ui.behaviors.UserInfoBehavior" -->
+        <!--app:layout_behavior="com.softdesign.devintensive.ui.behaviors.UserInfoBehavior"-->
+        <LinearLayout
+            android:id="@+id/user_info_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="@dimen/spacing_medial_24"
+            android:paddingTop="@dimen/spacing_medial_24"
+            app:layout_behavior=".ui.behaviors.UserInfoBehavior"
+            app:behavior_min_height="@dimen/size_medium_56">
+
+            <LinearLayout
+                style="@style/container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72"
+                android:layout_weight="1">
+
+                <TextView
+                    style="@style/text.up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"/>
+
+                <TextView
+                    style="@style/text.down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_stats_rating"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/line_size"
+                android:layout_height="72dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/grey_light"/>
+
+            <LinearLayout
+                style="@style/container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72"
+                android:layout_weight="2">
+
+                <TextView
+                    style="@style/text.up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2500"/>
+
+                <TextView
+                    style="@style/text.down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_stats_codelines" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/line_size"
+                android:layout_height="72dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/grey_light"/>
+
+            <LinearLayout
+                style="@style/container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_large_72"
+                android:layout_weight="1">
+
+                <TextView
+                    style="@style/text.up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5" />
+
+                <TextView
+                    style="@style/text.down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_stats_projects" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <include layout="@layout/user_profile_content"/>
 
