@@ -86,12 +86,10 @@
         <LinearLayout
             android:id="@+id/user_info_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/user_info_size"
             android:background="@color/grey"
             android:orientation="horizontal"
             android:gravity="center"
-            android:paddingBottom="@dimen/spacing_medial_24"
-            android:paddingTop="@dimen/spacing_medial_24"
             app:layout_behavior="com.softdesign.devintensive.ui.behaviors.UserInfoBehavior"
             app:behavior_min_height="@dimen/size_medium_56">
 

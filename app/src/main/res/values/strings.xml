@@ -1,4 +1,7 @@
 <resources>
+    <string name="ff_regular">sans-serif</string>
+    <string name="ff_medium">sans-serif-medium</string>
+
     <string name="app_name">Тимофей Коротков</string>
     <string name="about">O cебе</string>
     <string name="repo">Репозиторий</string>
@@ -29,7 +32,7 @@
     <string name="err_msg_github">Пример: github.com/username</string>
     <string name="title_activity_login">Sign in</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login TODO DELETE-->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Пароль</string>
     <string name="action_sign_in">ВОЙТИ</string>
@@ -38,5 +41,13 @@
     <string name="user_stats_rating">Рейтинг</string>
     <string name="user_stats_codelines">Написано строк кода</string>
     <string name="user_stats_projects">Проектов</string>
+
+    <!-- AuthActivity -->
+    <string name="auth.authorization_enter">Войти</string>
+    <string name="auth.email">Введите e-mail</string>
+    <string name="auth.password">Введите пароль</string>
+    <string name="auth.login">Войти</string>
+    <string name="auth.remember">Забыли пароль?</string>
+
 
 </resources>
