@@ -9,7 +9,6 @@ import android.view.View;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.UiHelper;
 
-
 /**
  * Created by qwsa on 09.07.2016.
  */

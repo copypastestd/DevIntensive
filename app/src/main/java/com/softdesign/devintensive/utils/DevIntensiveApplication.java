@@ -9,12 +9,12 @@ public class DevIntensiveApplication extends Application {
 
     public static SharedPreferences sSharedPreferences;
 
-    static Context sContext;
+    public static Context sContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        sContext = this;
+        sContext = getApplicationContext();
         sSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 

@@ -81,7 +81,8 @@
         </android.support.design.widget.AppBarLayout>
 
         <!-- app:layout_behavior=".ui.behaviors.UserInfoBehavior" -->
-        <!--app:layout_behavior="com.softdesign.devintensive.ui.behaviors.UserInfoBehavior"-->
+        <!--app:layout_behavior="com.softdesign.devintensive.ui.behaviors.UserInfoBehavior"
+        app:behavior_min_height="@dimen/size_medium_56"-->
         <LinearLayout
             android:id="@+id/user_info_wrapper"
             android:layout_width="match_parent"
@@ -91,7 +92,7 @@
             android:gravity="center"
             android:paddingBottom="@dimen/spacing_medial_24"
             android:paddingTop="@dimen/spacing_medial_24"
-            app:layout_behavior=".ui.behaviors.UserInfoBehavior"
+            app:layout_behavior="com.softdesign.devintensive.ui.behaviors.UserInfoBehavior"
             app:behavior_min_height="@dimen/size_medium_56">
 
             <LinearLayout
