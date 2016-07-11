@@ -1,4 +1,4 @@
-package softdesign.com.devintensive;
+package com.softdesign.devintensive;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

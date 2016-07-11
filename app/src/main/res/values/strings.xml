@@ -1,9 +1,42 @@
 <resources>
     <string name="app_name">Тимофей Коротков</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="about">O cебе</string>
     <string name="repo">Репозиторий</string>
     <string name="vk">Профиль в Vk</string>
     <string name="e_mail">E-mail</string>
     <string name="phone">Мобильный</string>
+    <string name="user_profile.placeholder.image">Изменить фотографию профиля</string>
+    <string name="user_profile_dialog_gallery">Загрузить из галлереи</string>
+    <string name="user_profile_dialog_camera">Сделать снимок</string>
+    <string name="user_profile_dialog_cancel">Отмена</string>
+    <string name="user_profile_dialog_title">Изменить фотографию профиля</string>
+    <string name="user_profile_choice_message">выберити фото</string>
+
+    <string name="phone_et_text">+79268642675</string>
+    <string name="email_et_text">qwsa@mail.xyz</string>
+    <string name="vk_et_text">vk.com/rain_man</string>
+    <string name="github_et_text">github.com/copypastestd</string>
+    <string name="bio_et_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+
+    <string name="warning_phone_number">Необходимо заполнить поле - телефон</string>
+    <string name="warning_email_address">Необходимо заполнить поле - email</string>
+    <string name="warning_vk_profile">Необходимо заполнить поле - Vk</string>
+    <string name="warning_github_profile">Необходимо заполнить поле - GitHub</string>
+
+    <string name="err_msg_phone">Введите корректный номер телефона</string>
+    <string name="err_msg_email">Введите корректный Email</string>
+    <string name="err_msg_vk">Пример: vk.com/username</string>
+    <string name="err_msg_github">Пример: github.com/username</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">ВОЙТИ</string>
+    <string name="action_restore_password">Забыли пароль?</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="user_stats_rating">Рейтинг</string>
+    <string name="user_stats_codelines">Написано строк кода</string>
+    <string name="user_stats_projects">Проектов</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package softdesign.com.devintensive.ui.activities;
+package com.softdesign.devintensive.ui.activities;
 
 
 import android.app.ProgressDialog;
@@ -8,18 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import softdesign.com.devintensive.R;
-import softdesign.com.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.R;
+import com.softdesign.devintensive.utils.ConstantManager;
 
 /**
  * Базовый класс для всех активити
  */
-public class BaseActivity extends AppCompatActivity {
+public class  BaseActivity extends AppCompatActivity {
 
     static final String TAG = ConstantManager.TAG_PREFIX + "BaseActivity";
 
     protected ProgressDialog mProgressDialog;
 
+    // TODO: 06.07.2016 https://github.com/JakeWharton/butterknife/issues/434
 
     public void showProgress() {
         if(mProgressDialog == null) {

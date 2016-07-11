@@ -1,4 +1,4 @@
-package softdesign.com.devintensive.data.manager;
+package com.softdesign.devintensive.data.manager;
 
 public class DataManager {
 

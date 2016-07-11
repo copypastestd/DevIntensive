@@ -1,4 +1,4 @@
-package softdesign.com.devintensive.utils;
+package com.softdesign.devintensive.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
