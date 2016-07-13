@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,11 +35,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
 import com.softdesign.devintensive.utils.ConstantManager;
-import com.softdesign.devintensive.utils.RoundedAvatarDrawable;
 import com.softdesign.devintensive.utils.UserDataTextWatcher;
 import com.squareup.picasso.Picasso;
 
@@ -110,6 +109,13 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.input_layout_github)
     TextInputLayout inputLayoutGithub;
 
+    @BindView(R.id.user_info_rate_txt)
+    TextView mUserValuesRating;
+    @BindView(R.id.user_info_code_line_txt)
+    TextView mUserValuesCodeLines;
+    @BindView(R.id.user_info_project_txt)
+    TextView mUserValuesProjects;
+
     @BindView(R.id.phone_et)
     EditText mUserPhone;
     @BindView(R.id.email_et)
@@ -121,6 +127,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.bio_et)
     EditText mUserBio;
 
+    private List<TextView> mUserValuesViews;
     private List<EditText> mUserInfoViews;
 
     private AppBarLayout.LayoutParams mAppBarParams = null;
@@ -136,6 +143,11 @@ public class MainActivity extends BaseActivity {
 
         mDataManager = DataManager.getInstance();
 
+        mUserValuesViews = new ArrayList<>();
+        mUserValuesViews.add(mUserValuesRating);
+        mUserValuesViews.add(mUserValuesCodeLines);
+        mUserValuesViews.add(mUserValuesProjects);
+
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(mUserPhone);
         mUserInfoViews.add(mUserMail);
@@ -146,29 +158,27 @@ public class MainActivity extends BaseActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View hView = navigationView.getHeaderView(0);
         mAvatar = (ImageView) hView.findViewById(R.id.avatar);
-        mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.avatar)));
+        //mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.avatar)));
 
         setupToolbar();
         setupDrawer();
-        loadUserInfoValue(); //saveUserInfoValue();
-        //saveUserInfoValue();
+        //fillDataToEditTexts();
+        initUserFields(); //saveUserFields();
+        initUserInfoValue();
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadUserPhoto())
                 .placeholder(R.drawable.userphoto) // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
                 .into(mProfileImage);
 
-        //List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
-
-
         if (savedInstanceState == null) {
             // активити запускается впервые
-            fillDataToEditTexts();
+
         } else {
             // активити уже создавалось
             mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 0);
             changeEditMode(mCurrentEditMode);
-            // loadUserInfoValue();
-            loadUserInfoValue();
+            // initUserFields();
+            //initUserFields();
 
         }
 
@@ -178,10 +188,10 @@ public class MainActivity extends BaseActivity {
         mUserMail.addTextChangedListener(new UserDataTextWatcher(this, emailLayout, inputLayoutEmail, mUserMail));
         mUserVk.addTextChangedListener(new UserDataTextWatcher(this, vkLayout, inputLayoutVk, mUserVk));
         mUserGit.addTextChangedListener(new UserDataTextWatcher(this, githubLayout, inputLayoutGithub, mUserGit));
-
     }
 
     /**
+     * @deprecated
      * Заполняет поля значениями по умолчанию,
      * при первом запуске приложения
      */
@@ -217,7 +227,7 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
-        saveUserInfoValue();
+        saveUserFields();
     }
 
     @Override
@@ -312,6 +322,13 @@ public class MainActivity extends BaseActivity {
 
     private void setupDrawer() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        Picasso.with(this)
+                .load(mDataManager.getPreferencesManager().loadUserAvatar())
+                .placeholder(R.drawable.nav_header_bg)
+                //.transform(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(),  mDataManager.getPreferencesManager().getString(ConstantManager.USER_AVATAR_KEY)
+                .into(mAvatar);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -380,24 +397,53 @@ public class MainActivity extends BaseActivity {
                 unlockToolbar();
                 mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
-                saveUserInfoValue();
+                saveUserFields();
             }
         }
     }
 
-    private void loadUserInfoValue() {
+    /**
+     * Загружает аватар пользователя
+     */
+    private void initUserAvatar(Uri selectedImage) {
+        Picasso.with(this)
+                .load(selectedImage)
+                .into(mProfileImage);
+
+        mDataManager.getPreferencesManager().saveUserAvatar(selectedImage);
+    }
+
+
+    /**
+     * Загружает данные пользователя
+     */
+    private void initUserFields() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
         for (int i = 0; i < userData.size(); i++) {
             mUserInfoViews.get(i).setText(userData.get(i));
         }
     }
 
-    private void saveUserInfoValue() {
+    /**
+     * Сохраняет данные пользователя
+     */
+    private void saveUserFields() {
         List<String> userData = new ArrayList<>();
         for (EditText userFieldsView : mUserInfoViews) {
             userData.add(userFieldsView.getText().toString());
         }
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
+    }
+
+    /**
+     * Загружает статистику пользователя
+     */
+    private void initUserInfoValue() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileValues();
+        for (int i = 0; i < userData.size(); i++) {
+            mUserValuesViews.get(i).setText(userData.get(i));
+        }
+
     }
 
     private void loadPhotoFromGallery() {
@@ -407,7 +453,6 @@ public class MainActivity extends BaseActivity {
         takeGalleryIntent.setType("image/*");
         startActivityForResult(Intent.createChooser(takeGalleryIntent, getString(R.string.user_profile_choice_message)), ConstantManager.REQUEST_GALLERY_PICTURE);
     }
-
 
     private void loadPhotoFromCamera() {
         Log.d("MY_TAG", "HERE");
@@ -437,7 +482,7 @@ public class MainActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, ConstantManager.CAMERE_REQUEST_PERMISSION_CODE);
+            }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
 
             Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
                     .setAction("Разрешить", new View.OnClickListener() {
@@ -452,7 +497,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == ConstantManager.CAMERE_REQUEST_PERMISSION_CODE && grantResults.length == 2) {
+        if (requestCode == ConstantManager.CAMERA_REQUEST_PERMISSION_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // TODO: 03.07.2016 тут обрабатываем разрешение (разрешение получено)
                 // например вывести сообщение или обработать какой то логикой если нужно
@@ -538,14 +583,16 @@ public class MainActivity extends BaseActivity {
         return image;
     }
 
-
+    /**
+     * Вставляет изображение профиля
+     * @param //selectedImage
+     */
     private void insertProfileImage(Uri selectedImage) {
         Picasso.with(this)
                 .load(selectedImage)
                 .into(mProfileImage);
         // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
         mDataManager.getPreferencesManager().saveUserPhoto(selectedImage);
-
     }
 
     public void openApplicationSettings() {
