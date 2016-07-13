@@ -74,12 +74,13 @@ public class PreferencesManager {
     }
 
     public Uri loadUserAvatar() {
-        return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_AVATAR_KEY, "android.resource://com.softdesign.devintensive/drawable/avatar"));
+        //return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_AVATAR_KEY, "android.resource://com.softdesign.devintensive/drawable/userphoto"));
+        return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_AVATAR_KEY, "android.resource://com.softdesign.devintensive/drawable/userphoto"));
     }
 
     public void saveUserAvatar(Uri uri) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(ConstantManager.USER_AVATAR_KEY, "android.resource://com.softdesign.devintensive/drawable/avatar");
+        editor.putString(ConstantManager.USER_AVATAR_KEY, uri.toString());
         editor.apply();
     }
 
@@ -89,11 +90,25 @@ public class PreferencesManager {
         //return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_PHOTO_KEY, null));
     }
 
-    public void saveUserPhoto(String urlAvatar) {
+    public void saveUserName(String name) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(ConstantManager.USER_PHOTO_KEY, "android.resource://com.softdesign.devintensive/drawable/userphoto");
+        editor.putString(ConstantManager.USER_NAME_KEY, name);
         editor.apply();
     }
+
+    public String getUserName() {
+        return mSharedPreferences.getString(ConstantManager.USER_NAME_KEY, "null");
+    }
+
+    public String getUserEmail() {
+        return mSharedPreferences.getString(ConstantManager.USER_MAIL_KEY, "null");
+    }
+/*
+    public void saveUserPhoto(String urlAvatar) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_NAME_KEY, String.valueOf(R.string.app_name));
+        editor.apply();
+    }*/
 
     public void saveAuthToken(String authToken) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();

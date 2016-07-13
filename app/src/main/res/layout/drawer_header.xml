@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="172dp"
                 android:paddingTop="@dimen/spacing_medial_24"
@@ -25,19 +26,19 @@
             android:id="@+id/user_name_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Тимофей Коротков"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-medium"/>
+            android:fontFamily="sans-serif-medium"
+            tools:text="Тимофей Коротков"/>
 
         <TextView
             android:id="@+id/user_email_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="myEmail@mail.ru"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"/>
+            android:fontFamily="sans-serif"
+            tools:text="myEmail@mail.ru"/>
 
     </LinearLayout>
 

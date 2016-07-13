@@ -40,6 +40,7 @@ import android.widget.TextView;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.RoundedTransformation;
 import com.softdesign.devintensive.utils.UserDataTextWatcher;
 import com.squareup.picasso.Picasso;
 
@@ -79,6 +80,9 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.user_photo_img)
     ImageView mProfileImage;
 
+    @BindView(R.id.navigation_view)
+    NavigationView navigationView;
+
     @BindView(R.id.call_img)
     ImageView mCallImg;
     @BindView(R.id.send_email_img)
@@ -88,8 +92,12 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.watch_github_img)
     ImageView mWatchGithubImg;
 
-    private ImageView mAvatar;
-
+    @BindView(R.id.user_info_rate_txt)
+    TextView mUserValuesRating;
+    @BindView(R.id.user_info_code_line_txt)
+    TextView mUserValuesCodeLines;
+    @BindView(R.id.user_info_project_txt)
+    TextView mUserValuesProjects;
 
     @BindView(R.id.phone_layout)
     LinearLayout phoneLayout;
@@ -108,13 +116,6 @@ public class MainActivity extends BaseActivity {
     TextInputLayout inputLayoutVk;
     @BindView(R.id.input_layout_github)
     TextInputLayout inputLayoutGithub;
-
-    @BindView(R.id.user_info_rate_txt)
-    TextView mUserValuesRating;
-    @BindView(R.id.user_info_code_line_txt)
-    TextView mUserValuesCodeLines;
-    @BindView(R.id.user_info_project_txt)
-    TextView mUserValuesProjects;
 
     @BindView(R.id.phone_et)
     EditText mUserPhone;
@@ -155,19 +156,15 @@ public class MainActivity extends BaseActivity {
         mUserInfoViews.add(mUserGit);
         mUserInfoViews.add(mUserBio);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        View hView = navigationView.getHeaderView(0);
-        mAvatar = (ImageView) hView.findViewById(R.id.avatar);
-        //mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.avatar)));
-
         setupToolbar();
         setupDrawer();
         //fillDataToEditTexts();
         initUserFields(); //saveUserFields();
         initUserInfoValue();
+
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadUserPhoto())
-                .placeholder(R.drawable.userphoto) // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
+                .placeholder(R.drawable.user_bg) // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
                 .into(mProfileImage);
 
         if (savedInstanceState == null) {
@@ -188,7 +185,8 @@ public class MainActivity extends BaseActivity {
         mUserMail.addTextChangedListener(new UserDataTextWatcher(this, emailLayout, inputLayoutEmail, mUserMail));
         mUserVk.addTextChangedListener(new UserDataTextWatcher(this, vkLayout, inputLayoutVk, mUserVk));
         mUserGit.addTextChangedListener(new UserDataTextWatcher(this, githubLayout, inputLayoutGithub, mUserGit));
-    }
+
+}
 
     /**
      * @deprecated
@@ -314,6 +312,7 @@ public class MainActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
 
         mAppBarParams = (AppBarLayout.LayoutParams) mCollapsingToolbar.getLayoutParams();
+        mCollapsingToolbar.setTitle(DataManager.getInstance().getPreferencesManager().getUserName());
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -321,13 +320,22 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupDrawer() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        //NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View hView = navigationView.getHeaderView(0);
+        ImageView mAvatar = (ImageView) hView.findViewById(R.id.avatar);
+        TextView drawerUserName = (TextView) hView.findViewById(R.id.user_name_txt);
+        TextView drawerEmail = (TextView) hView.findViewById(R.id.user_email_txt);
 
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadUserAvatar())
                 .placeholder(R.drawable.nav_header_bg)
-                //.transform(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(),  mDataManager.getPreferencesManager().getString(ConstantManager.USER_AVATAR_KEY)
+                .transform(new RoundedTransformation())
+                //.transform(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), Integer.parseInt(DataManager.getInstance().getPreferencesManager().loadUserAvatar().toString())
+                //.transform(RoundedTransformation)
                 .into(mAvatar);
+
+        drawerUserName.setText(DataManager.getInstance().getPreferencesManager().getUserName());
+        drawerEmail.setText(DataManager.getInstance().getPreferencesManager().getUserEmail());
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -403,6 +411,7 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * @deprecated
      * Загружает аватар пользователя
      */
     private void initUserAvatar(Uri selectedImage) {
