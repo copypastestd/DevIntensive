@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +40,6 @@ import android.widget.TextView;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
 import com.softdesign.devintensive.utils.ConstantManager;
-import com.softdesign.devintensive.utils.RoundedAvatarDrawable;
 import com.softdesign.devintensive.utils.UserDataTextWatcher;
 import com.squareup.picasso.Picasso;
 
@@ -111,6 +109,13 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.input_layout_github)
     TextInputLayout inputLayoutGithub;
 
+    @BindView(R.id.user_info_rate_txt)
+    TextView mUserValuesRating;
+    @BindView(R.id.user_info_code_line_txt)
+    TextView mUserValuesCodeLines;
+    @BindView(R.id.user_info_project_txt)
+    TextView mUserValuesProjects;
+
     @BindView(R.id.phone_et)
     EditText mUserPhone;
     @BindView(R.id.email_et)
@@ -122,14 +127,12 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.bio_et)
     EditText mUserBio;
 
+    private List<TextView> mUserValuesViews;
     private List<EditText> mUserInfoViews;
 
     private AppBarLayout.LayoutParams mAppBarParams = null;
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
-
-    private TextView mUserValuesRating, mUserValuesCodeLines, mUserValuesProjects;
-    private List<TextView> mUserValuesViews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,11 @@ public class MainActivity extends BaseActivity {
 
         mDataManager = DataManager.getInstance();
 
+        mUserValuesViews = new ArrayList<>();
+        mUserValuesViews.add(mUserValuesRating);
+        mUserValuesViews.add(mUserValuesCodeLines);
+        mUserValuesViews.add(mUserValuesProjects);
+
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(mUserPhone);
         mUserInfoViews.add(mUserMail);
@@ -147,42 +155,30 @@ public class MainActivity extends BaseActivity {
         mUserInfoViews.add(mUserGit);
         mUserInfoViews.add(mUserBio);
 
-        mUserValuesRating = (TextView) findViewById(R.id.user_info_rate_txt);
-        mUserValuesCodeLines = (TextView) findViewById(R.id.user_info_code_line_txt);
-        mUserValuesProjects = (TextView) findViewById(R.id.user_info_project_txt);
-
-        mUserValuesViews = new ArrayList<>();
-        mUserValuesViews.add(mUserValuesRating);
-        mUserValuesViews.add(mUserValuesCodeLines);
-        mUserValuesViews.add(mUserValuesProjects);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View hView = navigationView.getHeaderView(0);
         mAvatar = (ImageView) hView.findViewById(R.id.avatar);
-        mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.avatar)));
+        //mAvatar.setImageBitmap(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.avatar)));
 
         setupToolbar();
         setupDrawer();
+        //fillDataToEditTexts();
         initUserFields(); //saveUserFields();
         initUserInfoValue();
-        //saveUserFields();
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadUserPhoto())
                 .placeholder(R.drawable.userphoto) // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
                 .into(mProfileImage);
 
-        //List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
-
-
         if (savedInstanceState == null) {
             // активити запускается впервые
-            fillDataToEditTexts();
+
         } else {
             // активити уже создавалось
             mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 0);
             changeEditMode(mCurrentEditMode);
             // initUserFields();
-            initUserFields();
+            //initUserFields();
 
         }
 
@@ -195,6 +191,7 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * @deprecated
      * Заполняет поля значениями по умолчанию,
      * при первом запуске приложения
      */
@@ -325,6 +322,13 @@ public class MainActivity extends BaseActivity {
 
     private void setupDrawer() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        Picasso.with(this)
+                .load(mDataManager.getPreferencesManager().loadUserAvatar())
+                .placeholder(R.drawable.nav_header_bg)
+                //.transform(RoundedAvatarDrawable.getRoundedBitmap(BitmapFactory.decodeResource(getResources(),  mDataManager.getPreferencesManager().getString(ConstantManager.USER_AVATAR_KEY)
+                .into(mAvatar);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -398,6 +402,21 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Загружает аватар пользователя
+     */
+    private void initUserAvatar(Uri selectedImage) {
+        Picasso.with(this)
+                .load(selectedImage)
+                .into(mProfileImage);
+
+        mDataManager.getPreferencesManager().saveUserAvatar(selectedImage);
+    }
+
+
+    /**
+     * Загружает данные пользователя
+     */
     private void initUserFields() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
         for (int i = 0; i < userData.size(); i++) {
@@ -405,6 +424,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Сохраняет данные пользователя
+     */
     private void saveUserFields() {
         List<String> userData = new ArrayList<>();
         for (EditText userFieldsView : mUserInfoViews) {
@@ -413,11 +435,15 @@ public class MainActivity extends BaseActivity {
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
     }
 
+    /**
+     * Загружает статистику пользователя
+     */
     private void initUserInfoValue() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileValues();
         for (int i = 0; i < userData.size(); i++) {
             mUserValuesViews.get(i).setText(userData.get(i));
         }
+
     }
 
     private void loadPhotoFromGallery() {
@@ -557,14 +583,16 @@ public class MainActivity extends BaseActivity {
         return image;
     }
 
-
+    /**
+     * Вставляет изображение профиля
+     * @param //selectedImage
+     */
     private void insertProfileImage(Uri selectedImage) {
         Picasso.with(this)
                 .load(selectedImage)
                 .into(mProfileImage);
         // TODO: 03.07.2016 сделать плейсхолдер и transform + crop
         mDataManager.getPreferencesManager().saveUserPhoto(selectedImage);
-
     }
 
     public void openApplicationSettings() {

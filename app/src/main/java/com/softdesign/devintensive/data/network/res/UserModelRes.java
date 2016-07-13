@@ -68,9 +68,21 @@ public class UserModelRes {
         @SerializedName("updated")
         @Expose
         private String updated;
+
+        public Contacts getContacts() {
+            return contacts;
+        }
+
+        public Repositories getRepositories() {
+            return repositories;
+        }
+
+        public PublicInfo getPublicInfo() {
+            return publicInfo;
+        }
     }
 
-    private class Repositories {
+    public class Repositories {
 
         @SerializedName("repo")
         @Expose
@@ -78,9 +90,13 @@ public class UserModelRes {
         @SerializedName("updated")
         @Expose
         private String updated;
+
+        public List<Repo> getRepo() {
+            return repo;
+        }
     }
 
-    private class Repo {
+     public class Repo {
 
         @SerializedName("_id")
         @Expose
@@ -91,9 +107,13 @@ public class UserModelRes {
         @SerializedName("title")
         @Expose
         private String title;
+
+        public String getGit() {
+            return git;
+        }
     }
 
-    private class PublicInfo {
+    public class PublicInfo {
 
         @SerializedName("bio")
         @Expose
@@ -107,6 +127,18 @@ public class UserModelRes {
         @SerializedName("updated")
         @Expose
         private String updated;
+
+        public String getBio() {
+            return bio;
+        }
+
+        public String getAvatar() {
+            return avatar;
+        }
+
+        public String getPhoto() {
+            return photo;
+        }
     }
 
     public class ProfileValues {
@@ -140,7 +172,7 @@ public class UserModelRes {
         }
     }
 
-    private class Contacts {
+    public class Contacts {
 
         @SerializedName("vk")
         @Expose
@@ -154,6 +186,18 @@ public class UserModelRes {
         @SerializedName("updated")
         @Expose
         private String updated;
+
+        public String getVk() {
+            return vk;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public String getEmail() {
+            return email;
+        }
     }
 
     public class Data {

@@ -18,7 +18,7 @@ public class PreferencesManager {
             ConstantManager.USER_MAIL_KEY,
             ConstantManager.USER_VK_KEY,
             ConstantManager.USER_GIT_KEY,
-            ConstantManager.USER_BIO_KEY
+            ConstantManager.USER_BIO_KEY,
     };
 
     private static final String[] USER_VALUES = {
@@ -64,6 +64,7 @@ public class PreferencesManager {
         return userValues;
     }
 
+
     public void saveUserProfileValues(int[] userValues) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
 
@@ -72,9 +73,26 @@ public class PreferencesManager {
         } editor.apply();
     }
 
+    public Uri loadUserAvatar() {
+        return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_AVATAR_KEY, "android.resource://com.softdesign.devintensive/drawable/avatar"));
+    }
+
+    public void saveUserAvatar(Uri uri) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_AVATAR_KEY, "android.resource://com.softdesign.devintensive/drawable/avatar");
+        editor.apply();
+    }
+
+
     public Uri loadUserPhoto() {
-        return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_PHOTO_KEY, "android.resource://com.softdesign.devintensive/drawable/avatar"));
+        return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_PHOTO_KEY, "android.resource://com.softdesign.devintensive/drawable/userphoto"));
         //return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_PHOTO_KEY, null));
+    }
+
+    public void saveUserPhoto(String urlAvatar) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_PHOTO_KEY, "android.resource://com.softdesign.devintensive/drawable/userphoto");
+        editor.apply();
     }
 
     public void saveAuthToken(String authToken) {

@@ -16,6 +16,9 @@ import com.softdesign.devintensive.data.network.req.UserLoginReq;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,7 +81,9 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         showSnackbar(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveAuthToken(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveUserId(userModel.getData().getUser().getId());
+        //saveUserData(userModel);
         saveUserValues(userModel);
+
 
         Intent loginIntent = new Intent(this, MainActivity.class);
         startActivity(loginIntent);
@@ -86,7 +91,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
 
     private void signIn() {
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
-            Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(mLogin.getText().toString(), mPassword.getText().toString()));
+            // TODO: FIX  //Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(mLogin.getText().toString(), mPassword.getText().toString()));
+            Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq("copypastestd@gmail.com", "123456"));
             call.enqueue(new Callback<UserModelRes>() {
                 @Override
                 public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
@@ -115,9 +121,36 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                 userModel.getData().getUser().getProfileValues().getLinesCode(),
                 userModel.getData().getUser().getProfileValues().getProjects(),
         };
-
         mDataManager.getPreferencesManager().saveUserProfileValues(userValues);
+
+        List<String> userData = new ArrayList<>();
+        userData.add(userModel.getData().getUser().getContacts().getPhone());
+        userData.add(userModel.getData().getUser().getContacts().getEmail());
+        userData.add(userModel.getData().getUser().getContacts().getVk());
+        userData.add(userModel.getData().getUser().getRepositories().getRepo().get(0).getGit());
+        userData.add(userModel.getData().getUser().getPublicInfo().getBio());
+        mDataManager.getPreferencesManager().saveUserProfileData(userData);
+
+        String avatarUrl = userModel.getData().getUser().getPublicInfo().getAvatar();
+        mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(avatarUrl));
+
+        String photoUrl = userModel.getData().getUser().getPublicInfo().getPhoto();
+        mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(photoUrl));
+
+
+
+
+
     }
 
+    /*private void saveUserData(UserModelRes userModel) {
+        String[] userData = {
+                userModel.getData().getUser().getContacts().getPhone(),
+                userModel.getData().getUser().getContacts().getEmail(),
+                userModel.getData().getUser().getContacts().getVk(),
+        };
+
+        mDataManager.getPreferencesManager().saveUserProfileData(userData);
+    }*/
 }
 
