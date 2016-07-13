@@ -14,6 +14,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 
 /**
+ * @deprecated
  * Created by qwsa on 27.06.2016.
  */
 public class RoundedAvatarDrawable extends Drawable {

@@ -80,6 +80,14 @@ public class UserModelRes {
         public PublicInfo getPublicInfo() {
             return publicInfo;
         }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getSecondName() {
+            return secondName;
+        }
     }
 
     public class Repositories {

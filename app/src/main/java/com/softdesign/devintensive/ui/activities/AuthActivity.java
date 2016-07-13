@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +18,9 @@ import com.softdesign.devintensive.utils.NetworkStatusChecker;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,13 +29,22 @@ import retrofit2.Response;
 /**
  * A login screen activity.
  */
-public class AuthActivity extends BaseActivity implements View.OnClickListener {
+public class AuthActivity extends BaseActivity {
 
-    private Button mSignIn;
-    private TextView mRememberPassword;
-    private EditText mLogin, mPassword;
-    private CoordinatorLayout mCoordinatorLayout;
     private DataManager mDataManager;
+
+    @BindView(R.id.main_coordinator_container)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.login_btn)
+    Button mSignIn;
+    @BindView(R.id.remember_txt)
+    TextView mRememberPassword;
+    @BindView(R.id.login_email_et)
+    EditText mLogin;
+    @BindView(R.id.login_password_et)
+    EditText mPassword;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,27 +54,23 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
 
         mDataManager = DataManager.getInstance();
 
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
-        mSignIn = (Button) findViewById(R.id.login_btn);
-        mRememberPassword = (TextView) findViewById(R.id.remember_txt);
-        mLogin = (EditText) findViewById(R.id.login_email_et);
-        mPassword = (EditText) findViewById(R.id.login_password_et);
 
-        mRememberPassword.setOnClickListener(this);
-        mSignIn.setOnClickListener(this);
+        /** Для тестирования */
+        mLogin.setText("copypastestd@gmail.com");
+        mPassword.setText("123456");
+        //mLogin.setText("shmakova-nastya@yandex.ru");
+        //mPassword.setText("iliich");
     }
 
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.login_btn:
-                signIn();
-                break;
-            case R.id.remember_txt:
-                rememberPassword();
-                break;
-        }
+    @OnClick(R.id.login_btn)
+    public void onLoginBtnClick() {
+        signIn();
+    }
+
+    @OnClick(R.id.remember_txt)
+    public void onRememberPasswordClick() {
+        rememberPassword();
     }
 
     private void showSnackbar(String message) {
@@ -91,8 +97,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
 
     private void signIn() {
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
-            // TODO: FIX  //Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(mLogin.getText().toString(), mPassword.getText().toString()));
-            Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq("copypastestd@gmail.com", "123456"));
+            Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(mLogin.getText().toString(), mPassword.getText().toString()));
+            // TODO: FIX  Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq("copypastestd@gmail.com", "123456"));
             call.enqueue(new Callback<UserModelRes>() {
                 @Override
                 public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
@@ -131,26 +137,17 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         userData.add(userModel.getData().getUser().getPublicInfo().getBio());
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
 
+        String userName = userModel.getData().getUser().getFirstName()
+                + " " + userModel.getData().getUser().getSecondName();
+        mDataManager.getPreferencesManager().saveUserName(userName);
+
         String avatarUrl = userModel.getData().getUser().getPublicInfo().getAvatar();
-        mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(avatarUrl));
+        mDataManager.getPreferencesManager().saveUserAvatar(Uri.parse(avatarUrl));
 
         String photoUrl = userModel.getData().getUser().getPublicInfo().getPhoto();
         mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(photoUrl));
 
-
-
-
-
     }
 
-    /*private void saveUserData(UserModelRes userModel) {
-        String[] userData = {
-                userModel.getData().getUser().getContacts().getPhone(),
-                userModel.getData().getUser().getContacts().getEmail(),
-                userModel.getData().getUser().getContacts().getVk(),
-        };
-
-        mDataManager.getPreferencesManager().saveUserProfileData(userData);
-    }*/
 }
 
