@@ -2,6 +2,7 @@ package com.softdesign.devintensive.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,17 +42,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
         UserListRes.UserData user = mUsers.get(position);
 
-        //// TODO: 14.07.2016 fix deprecated class 
-        Picasso.with(mContext)
-                .load(user.getPublicInfo().getPhoto())
-                .placeholder(mContext.getResources().getDrawable(R.drawable.user_bg))
-                //.resize(R.dimen.profile_image_size, R.dimen.profile_image_size)
-                /*.resize(mContext.getResources().getDimensionPixelSize(R.dimen.profile_image_size),
+        //// TODO: 14.07.2016 fix deprecated class
+        try {
+            Picasso.with(mContext)
+                    .load(user.getPublicInfo().getPhoto())
+                    .placeholder(mContext.getResources().getDrawable(R.drawable.user_bg))
+                    //.resize(R.dimen.profile_image_size, R.dimen.profile_image_size)
+              /*.resize(mContext.getResources().getDimensionPixelSize(R.dimen.profile_image_size),
                         mContext.getResources().getDimensionPixelSize(R.dimen.profile_image_size))*/
-                .fit()
-                .centerCrop()
-                .error(mContext.getResources().getDrawable(R.drawable.user_bg))
-                .into(holder.userPhoto);
+                    .fit()
+                    .centerCrop()
+                    .error(mContext.getResources().getDrawable(R.drawable.user_bg))
+                    .into(holder.userPhoto);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            holder.userPhoto.setImageResource(R.drawable.user_bg);
+        }
+
 
         holder.mFullName.setText(user.getFullName());
         holder.mRating.setText(String.valueOf(user.getProfileValues().getRating()));
@@ -70,6 +77,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     public int getItemCount() {
         return mUsers.size();
     }
+
+    public void setUsers(List<UserListRes.UserData> users) {
+        mUsers = users;
+    }
+
 
     public static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -91,21 +103,30 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             mBio = (TextView) itemView.findViewById(R.id.bio_txt);
             mShowMore = (Button) itemView.findViewById(R.id.more_info_btn);
 
-            //userPhoto.setOnClickListener(this);
+            userPhoto.setOnClickListener(this);
             mShowMore.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (mListener != null) {
-                mListener.onUserItemClickListener(getAdapterPosition());
+                switch (v.getId()) {
+                    case R.id.more_info_btn:
+                        mListener.onUserItemClickListener(getAdapterPosition());
+                        break;
+                    case R.id.user_photo_img:
+                        mListener.onImageItemClickListener(v);
+                        //userPhoto.getHeight()
+                        Log.e("TAG", "Click");
+                }
             }
-
         }
 
         public interface CustomClickListener{
 
             void onUserItemClickListener(int position);
+
+            void onImageItemClickListener(View v);
         }
     }
 }
