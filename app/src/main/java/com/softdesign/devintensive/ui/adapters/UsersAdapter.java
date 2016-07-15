@@ -29,8 +29,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         this.mCustomClickListener = customClickListener;
     }
 
-
-
     @Override
     public UsersAdapter.UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
@@ -47,6 +45,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         Picasso.with(mContext)
                 .load(user.getPublicInfo().getPhoto())
                 .placeholder(mContext.getResources().getDrawable(R.drawable.user_bg))
+                //.resize(R.dimen.profile_image_size, R.dimen.profile_image_size)
+                /*.resize(mContext.getResources().getDimensionPixelSize(R.dimen.profile_image_size),
+                        mContext.getResources().getDimensionPixelSize(R.dimen.profile_image_size))*/
+                .fit()
+                .centerCrop()
                 .error(mContext.getResources().getDrawable(R.drawable.user_bg))
                 .into(holder.userPhoto);
 
@@ -65,14 +68,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mUsers.size();
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected AspectRatioImageView userPhoto;
         protected TextView mFullName, mRating, mCodeLines, mProjects, mBio;
-        protected Button showMore;
+        protected Button mShowMore;
 
         private CustomClickListener mListener;
 
@@ -86,13 +89,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             mCodeLines = (TextView) itemView.findViewById(R.id.code_lines_txt);
             mProjects = (TextView) itemView.findViewById(R.id.projects_txt);
             mBio = (TextView) itemView.findViewById(R.id.bio_txt);
-            showMore = (Button) itemView.findViewById(R.id.more_info_btn);
+            mShowMore = (Button) itemView.findViewById(R.id.more_info_btn);
 
-            showMore.setOnClickListener(this);
+            //userPhoto.setOnClickListener(this);
+            mShowMore.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(View v) {
             if (mListener != null) {
                 mListener.onUserItemClickListener(getAdapterPosition());
             }
@@ -112,7 +116,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     private List<UserListRes.UserData> mUsers;
     private UserViewHolder.CustomClickListener mCustomClickListener;
 
-    public UsersAdapter(List<UserListRes.UserData> users) {
+    public UsersAdapter(List<UserListRes.UserData> users, UserViewHolder.CustomClickListener customClickListener) {
         mUsers = users;
     }
 
