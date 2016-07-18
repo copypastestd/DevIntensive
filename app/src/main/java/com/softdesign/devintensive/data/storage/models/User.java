@@ -2,7 +2,9 @@ package com.softdesign.devintensive.data.storage.models;
 
 import com.softdesign.devintensive.data.network.res.UserListRes;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinProperty;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -47,6 +49,14 @@ public class User {
     })
     private List<Respository> respositories;
 
+    /** Used for active entity operations. */
+    @Generated(hash = 1507654846)
+    private transient UserDao myDao;
+
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+
     public User(UserListRes.UserData userRes) {
 
         this.remoteId = userRes.getId();
@@ -57,6 +67,25 @@ public class User {
         this.codeLines = userRes.getProfileValues().getLinesCode();
         this.projects = userRes.getProfileValues().getProjects();
         this.bio = userRes.getPublicInfo().getBio();
+    }
+
+    @Generated(hash = 1023608416)
+    public User(Long id, @NotNull String remoteId, String photo,
+            @NotNull String fullName, @NotNull String searchName, int rating,
+            int codeLines, int projects, String bio) {
+        this.id = id;
+        this.remoteId = remoteId;
+        this.photo = photo;
+        this.fullName = fullName;
+        this.searchName = searchName;
+        this.rating = rating;
+        this.codeLines = codeLines;
+        this.projects = projects;
+        this.bio = bio;
+    }
+
+    @Generated(hash = 586692638)
+    public User() {
     }
 
     public String getPhoto() {
@@ -83,7 +112,126 @@ public class User {
         return bio;
     }
 
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 859828234)
+    public synchronized void resetRespositories() {
+        respositories = null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 314409967)
     public List<Respository> getRespositories() {
+        if (respositories == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            RespositoryDao targetDao = daoSession.getRespositoryDao();
+            List<Respository> respositoriesNew = targetDao._queryUser_Respositories(remoteId);
+            synchronized (this) {
+                if(respositories == null) {
+                    respositories = respositoriesNew;
+                }
+            }
+        }
         return respositories;
     }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 2059241980)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getUserDao() : null;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public void setProjects(int projects) {
+        this.projects = projects;
+    }
+
+    public void setCodeLines(int codeLines) {
+        this.codeLines = codeLines;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getSearchName() {
+        return this.searchName;
+    }
+
+    public void setSearchName(String searchName) {
+        this.searchName = searchName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getRemoteId() {
+        return this.remoteId;
+    }
+
+    public void setRemoteId(String remoteId) {
+        this.remoteId = remoteId;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /*public List<Respository> getRespositories() {
+        return respositories;
+    }*/
 }

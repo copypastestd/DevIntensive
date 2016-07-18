@@ -1,10 +1,8 @@
 package com.softdesign.devintensive.ui.activities;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -13,10 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
@@ -27,7 +25,7 @@ import com.softdesign.devintensive.utils.ConstantManager;
 
 import java.util.List;
 
-public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener {
+public class UserListActivity extends BaseActivity /*implements SearchView.OnQueryTextListener*/ {
 
     private static final String TAG = ConstantManager.TAG_PREFIX + " UserListActivity";
     private CoordinatorLayout mCoordinatorLayout;
@@ -38,6 +36,11 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     private DataManager mDataManager;
     private UsersAdapter mUsersAdapter;
     private List<User> mUsers;
+
+    private MenuItem mSearchItem;
+    private String mQuery;
+
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,8 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mHandler = new Handler();
 
         setupToolbar();
         setupDrawer();
@@ -71,23 +76,11 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     }
 
     private void loadUsersFromDb() {
-
-        mUsers = mDataManager.getUserListFromDb();
-        if (mUsers.size() == 0) {
+        if (mDataManager.getUserListFromDb().size() == 0) {
             showSnackbar("Список пользователей не может быть загружен");
         } else {
-            mUsersAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener() {
-                @Override
-                public void onUserItemClickListener(int position) {
-                    UserDTO userDTO = new UserDTO(mUsers.get(position));
-                    Intent profilerIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
-                    profilerIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
-
-                    startActivity(profilerIntent);
-                }
-            });
+            showUsers(mDataManager.getUserListFromDb());
         }
-        mRecyclerView.setAdapter(mUsersAdapter);
     }
 
     private void setupDrawer() {
@@ -104,7 +97,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.user_list_menu, menu);
@@ -136,5 +129,59 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         mUsersAdapter.setUsers(mUsers);
         mUsersAdapter.notifyDataSetChanged();
         return true;
+    }*/
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+
+        mSearchItem = menu.findItem(R.id.search_action);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        searchView.setQueryHint("Введите имя пользователя");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //TODO поиск вызывать тут
+                showUserByQuery(newText);
+                return false;
+            }
+        });
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void showUsers(List<User> users) {
+        mUsers = users;
+        mUsersAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener() {
+            @Override
+            public void onUserItemClickListener(int position) {
+                UserDTO userDTO = new UserDTO(mUsers.get(position));
+                Intent profilerIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
+                profilerIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
+
+                startActivity(profilerIntent);
+            }
+        });
+    mRecyclerView.swapAdapter(mUsersAdapter, false);
+    }
+
+    private void showUserByQuery(String query) {
+        mQuery = query;
+
+        Runnable searchUsers = new Runnable() {
+            @Override
+            public void run() {
+                showUsers(mDataManager.getUserListByName(mQuery));
+            }
+        };
+
+        mHandler.removeCallbacks(searchUsers);
+        mHandler.postDelayed(searchUsers, ConstantManager.SEARCH_DELAY);
+
+
     }
 }

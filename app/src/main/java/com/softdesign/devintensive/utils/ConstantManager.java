@@ -29,4 +29,5 @@ public interface ConstantManager {
     int CAMERA_REQUEST_PERMISSION_CODE = 102;
 
     String PARCELABLE_KEY = "PARCELABLE_KEY";
+    int SEARCH_DELAY = 1500;
 }
