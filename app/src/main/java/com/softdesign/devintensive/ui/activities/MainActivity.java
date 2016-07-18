@@ -340,8 +340,14 @@ public class MainActivity extends BaseActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.team_menu:
+                        startActivity(new Intent(MainActivity.this, UserListActivity.class));
+
+                        item.setChecked(true);
+                        break;
+                }
                 showSnackbar(item.getTitle().toString());
-                item.setChecked(true);
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
 
                 return false;

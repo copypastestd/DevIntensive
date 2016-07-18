@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_coordinator_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_primary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentScrim="@color/color_primary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <ImageView
+                    android:id="@+id/user_photo_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profile_image_size"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/user_bg"
+                    android:fitsSystemWindows="true"/>
+
+
+            <!-- TODO проверить стили -->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:theme="@style/ToolbarStyle"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:titleTextColor="@color/white"
+                app:layout_collapseMode="pin"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/user_info_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/user_info_size"
+        android:background="@color/grey"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:behavior_min_height="@dimen/size_medium_56"
+        app:layout_behavior="com.softdesign.devintensive.ui.behaviors.UserInfoBehavior">
+
+        <LinearLayout
+            style="@style/container"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_large_72"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/user_info_rate_txt"
+                style="@style/text.up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5"/>
+
+            <TextView
+                style="@style/text.down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_stats_rating"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/line_size"
+            android:layout_height="72dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@color/grey_light"/>
+
+        <LinearLayout
+            style="@style/container"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_large_72"
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/user_info_code_line_txt"
+                style="@style/text.up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="2500"/>
+
+            <TextView
+                style="@style/text.down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_stats_codelines"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/line_size"
+            android:layout_height="72dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@color/grey_light"/>
+
+        <LinearLayout
+            style="@style/container"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_large_72"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/user_info_project_txt"
+                style="@style/text.up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5"/>
+
+            <TextView
+                style="@style/text.down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_stats_projects"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include layout="@layout/static_profile_content"/>
+
+</android.support.design.widget.CoordinatorLayout>
+
