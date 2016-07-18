@@ -15,24 +15,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
-import com.softdesign.devintensive.data.network.res.UserListRes;
+import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
@@ -44,8 +37,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private DataManager mDataManager;
     private UsersAdapter mUsersAdapter;
-    private List<UserListRes.UserData> mUsers;
-    private List<UserListRes.UserData> mQueryUsers;
+    private List<User> mUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +55,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
         setupToolbar();
         setupDrawer();
-        loadUsers();
+        loadUsersFromDb();
     }
 
     @Override
@@ -78,46 +70,24 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
-    private void loadUsers() {
-        Call<UserListRes> call = mDataManager.getUserList();
+    private void loadUsersFromDb() {
 
-        call.enqueue(new Callback<UserListRes>() {
-            @Override
-            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
-                try {
-                    mUsers = response.body().getData();
-                    mQueryUsers = new ArrayList<>(mUsers);
-                    mUsersAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener() {
-                        @Override
-                        public void onUserItemClickListener(int position) {
+        mUsers = mDataManager.getUserListFromDb();
+        if (mUsers.size() == 0) {
+            showSnackbar("Список пользователей не может быть загружен");
+        } else {
+            mUsersAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener() {
+                @Override
+                public void onUserItemClickListener(int position) {
+                    UserDTO userDTO = new UserDTO(mUsers.get(position));
+                    Intent profilerIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
+                    profilerIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
 
-                            showSnackbar("Пользователь с индексом " + position); //TODO: DELETE
-                            //UserDTO userDTO = new UserDTO(mUsers.get(position));
-                            UserDTO userDTO = new UserDTO(mQueryUsers.get(position));
-
-                            Intent profilerIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
-                            profilerIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
-
-                            startActivity(profilerIntent);
-                        }
-
-                        @Override
-                        public void onImageItemClickListener(View v) {
-                            //showSnackbar(String.valueOf(v.getHeight() + " " + v.getWidth()));
-                        }
-                    });
-                    mRecyclerView.setAdapter(mUsersAdapter);
-                } catch (NullPointerException e) {
-                    Log.e(TAG, e.toString());
-                    showSnackbar("Что то пошло не так");
+                    startActivity(profilerIntent);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<UserListRes> call, Throwable t) {
-                //TODO Обработать ошибки
-            }
-        });
+            });
+        }
+        mRecyclerView.setAdapter(mUsersAdapter);
     }
 
     private void setupDrawer() {
@@ -157,13 +127,13 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        mQueryUsers.clear();
-        for (UserListRes.UserData user : mUsers) {
+        mUsers.clear();
+        for (User user : mUsers) {
             if (user.getFullName().toLowerCase().contains(newText.toLowerCase())) {
-                mQueryUsers.add(user);
+                mUsers.add(user);
             }
         }
-        mUsersAdapter.setUsers(mQueryUsers);
+        mUsersAdapter.setUsers(mUsers);
         mUsersAdapter.notifyDataSetChanged();
         return true;
     }

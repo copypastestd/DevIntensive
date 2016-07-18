@@ -81,6 +81,7 @@ public class ProfileUserActivity extends BaseActivity {
         mUserCodeLines.setText(userDTO.getCodeLines());
         mUserProjects.setText(userDTO.getProjects());
 
+        // TODO: 17.07.2016 Испрвить имя пользователя
         mCollapsingToolbarLayout.setTitle(userDTO.getFullName());
 
         Picasso.with(this)
