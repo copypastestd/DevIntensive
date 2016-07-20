@@ -3,7 +3,6 @@ package com.softdesign.devintensive.ui.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -20,7 +19,6 @@ import com.softdesign.devintensive.data.storage.models.Respository;
 import com.softdesign.devintensive.data.storage.models.RespositoryDao;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDao;
-import com.softdesign.devintensive.utils.AppConfig;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
 import java.util.ArrayList;
@@ -67,8 +65,8 @@ public class AuthActivity extends BaseActivity {
         mRespositoryDao = mDataManager.getDaoSession().getRespositoryDao();
 
         /** Для тестирования */
-        mLogin.setText("copypastestd@gmail.com");
-        mPassword.setText("123456");
+  /*      mLogin.setText("copypastestd@gmail.com");
+        mPassword.setText("123456");*/
         //mLogin.setText("shmakova-nastya@yandex.ru");
         //mPassword.setText("iliich");
     }
@@ -102,14 +100,17 @@ public class AuthActivity extends BaseActivity {
         saveUserValues(userModel);
         saveUserInDb();
 
-        Handler handler = new Handler();
+        Intent loginIntent = new Intent(AuthActivity.this, MainActivity.class);
+        startActivity(loginIntent);
+
+        /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent loginIntent = new Intent(AuthActivity.this, UserListActivity.class);
+                Intent loginIntent = new Intent(AuthActivity.this, MainActivity.class);
                 startActivity(loginIntent);
             }
-        }, AppConfig.START_DELAY);
+        }, AppConfig.START_DELAY);*/
 
     }
 
