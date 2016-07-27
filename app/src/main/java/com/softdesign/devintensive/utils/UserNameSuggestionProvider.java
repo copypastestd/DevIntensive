@@ -31,7 +31,7 @@ public class UserNameSuggestionProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
         if (users == null || users.isEmpty()){
             users = new ArrayList<>();
-            users = (List<String>) DataManager.getInstance().getUserList();
+            users = (List<String>) DataManager.getInstance().getUserListFromNetwork();
         }
 
         MatrixCursor cursor = new MatrixCursor(

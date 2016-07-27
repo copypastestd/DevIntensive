@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,7 +13,12 @@ import android.widget.TextView;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.manager.DataManager;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
+import com.softdesign.devintensive.data.storage.models.Respository;
+import com.softdesign.devintensive.data.storage.models.RespositoryDao;
+import com.softdesign.devintensive.data.storage.models.User;
+import com.softdesign.devintensive.data.storage.models.UserDao;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
 import java.util.ArrayList;
@@ -44,6 +50,8 @@ public class AuthActivity extends BaseActivity {
     @BindView(R.id.login_password_et)
     EditText mPassword;
 
+    private RespositoryDao mRespositoryDao;
+    private UserDao mUserDao;
 
 
     @Override
@@ -53,11 +61,12 @@ public class AuthActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mDataManager = DataManager.getInstance();
-
+        mUserDao = mDataManager.getDaoSession().getUserDao();
+        mRespositoryDao = mDataManager.getDaoSession().getRespositoryDao();
 
         /** Для тестирования */
-        mLogin.setText("copypastestd@gmail.com");
-        mPassword.setText("123456");
+  /*      mLogin.setText("copypastestd@gmail.com");
+        mPassword.setText("123456");*/
         //mLogin.setText("shmakova-nastya@yandex.ru");
         //mPassword.setText("iliich");
     }
@@ -89,10 +98,20 @@ public class AuthActivity extends BaseActivity {
         mDataManager.getPreferencesManager().saveUserId(userModel.getData().getUser().getId());
         //saveUserData(userModel);
         saveUserValues(userModel);
+        saveUserInDb();
 
-
-        Intent loginIntent = new Intent(this, MainActivity.class);
+        Intent loginIntent = new Intent(AuthActivity.this, MainActivity.class);
         startActivity(loginIntent);
+
+        /*Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent loginIntent = new Intent(AuthActivity.this, MainActivity.class);
+                startActivity(loginIntent);
+            }
+        }, AppConfig.START_DELAY);*/
+
     }
 
     private void signIn() {
@@ -146,8 +165,57 @@ public class AuthActivity extends BaseActivity {
 
         String photoUrl = userModel.getData().getUser().getPublicInfo().getPhoto();
         mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(photoUrl));
+    }
+
+    private void saveUserInDb() {
+        Call<UserListRes> call = mDataManager.getUserListFromNetwork();
+
+        call.enqueue(new Callback<UserListRes>() {
+            @Override
+            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
+                try {
+                    if (response.code() == 200) {
+                        List<Respository> allRespositories = new ArrayList<Respository>();
+                        List<User> allUsers = new ArrayList<User>();
+
+                        for (UserListRes.UserData userRes : response.body().getData()) {
+
+                            allRespositories.addAll(getRepoListFromUserRes(userRes));
+                            allUsers.add(new User(userRes));
+
+                            mRespositoryDao.insertOrReplaceInTx(allRespositories);
+                            mUserDao.insertOrReplaceInTx(allUsers);
+
+                        }
+                    } else {
+                        showSnackbar("Список пользователей не может быть получен");
+                        Log.e(TAG, "onResponse: " + String.valueOf(response.errorBody().source()));
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    showSnackbar("Что то пошло не так");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserListRes> call, Throwable t) {
+                //TODO Обработать ошибки
+            }
+        });
+    }
+
+    private List<Respository> getRepoListFromUserRes(UserListRes.UserData userData) {
+        final String userId = userData.getId();
+
+        List<Respository> respositories = new ArrayList<>();
+        for (UserModelRes.Repo respositoryRes : userData.getRepositories().getRepo()) {
+            respositories.add(new Respository(respositoryRes, userId));
+        }
+
+        return respositories;
 
     }
+
 
 }
 
